@@ -1,7 +1,4 @@
-typedef semaphore
-{
-    int value;
-};
+typedef int semaphore;
 
 semaphore mutex = 1;
 semaphore empty = n;
@@ -11,6 +8,7 @@ producer()
 {
     while (1)
     {
+        // pseudocode
         produce an item in nextp;        // 生产数据
         P(empty);
         P(mutex);
