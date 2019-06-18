@@ -9,16 +9,16 @@ Pi()
     {
         P(chopstick[i]);
         P(chopstick[(i + 1) % 5]);
-        eat;
+        eat();
         V(chopstick[(i + 1) % 5]);
         V(chopstick[i]);
-        think;
+        think();
     } while (1);
 }
 
 semaphor mutex = 1;
 
-Pi()
+Pi()        /** 当哲学家左右两边的筷子都可用的时候，才允许拿起 */
 {
     do
     {
@@ -26,10 +26,9 @@ Pi()
         P(chopstick[i]);
         P(chopstick[(i + 1) % 5]);
         V(mutex);
-        eat;
+        eat();
         V(chopstick[(i + 1) % 5]);
         V(chopstick[i]);
-        think;
+        think();
     } while (1);
-    
 }
