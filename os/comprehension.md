@@ -6,7 +6,7 @@
 
 * 2，进程间有哪几种制约关系，各是什么原因引起的？
 
-  > 进程间只有两种制约关系：<big>同步和互斥</big>
+  > 进程间只有两种制约关系：<big>同步和互斥</big> 
   > 同步是由于并发进程之间需要协同完成同一任务时引起的一种关系，是一个进程等待另一个进程向它直接发送消息或数据时的一种制约关系。
   > 互斥时由于并发进程之间竞争系统的临界资源引起，是一个进程等等待另一个进程已经占有的必须互斥使用的资源时的一种制约关系。
 
@@ -62,7 +62,72 @@
   > }coend
   > ~~~
 
+* 6, 一个仓库可以存放A和B两种产品，要求：
+  ① 每次只能存入一种产品
+  ② A产品数量 - B产品数量 < M
+  ③ B产品数量 - A产品数量 < N
+  其中M、N是正整数
+
+  > 使用互斥信号量mutex 控制仓库的互斥访问，使用信号量Sa和Sb（分别代表产品A与B的还可容纳的数量差，以及产品B与A的还可容纳的数量差）
+  >
+  > ~~~c
+  > semaphore Sa = M-1, Sb = N-1;
+  > semaphore mutex = 1;
+  > 
+  > proess_A(){
+  >     while(true){
+  >         P(Sa);
+  >         P(mutex);
+  >         put_a2repository();
+  >         V(mutex);
+  >         V(Sb);
+  >     }
+  > }
+  > 
+  > process_B(){
+  >     while(true){
+  >         P(Sb);
+  >         P(mutex);
+  >         put_b2repository();
+  >         V(mutex);
+  >         V(Sa);
+  >     }
+  > }
+  > ~~~
+
+* 7，面包师和他的推销人员，顾客进店取号并等待，推销人员叫号
+
+  > 顾客进店按序取号，销售人员空闲后按序叫号，故使用两个变量i和j记录当前叫号取号值，并使用各自互斥信号量
+  >
+  > ~~~c
+  > int i = 0, j = 0;
+  > semaphore mutex_i = 1, mutex_j = 1;
+  > 
+  > process customer(){
+  >     get_into_shop();	// 进入面包店
+  >     P(mutex_i);			// 使用叫号机
+  >     get_a_number();		// 排队取号
+  >     i++;
+  >     V(mutex_i);
+  >     wait_calling();		// 等待被叫
+  > 
+  > }
+  > 
+  > process seller(){
+  >     while(true){
+  >         P(mutex_j);		// 互斥访问
+  >         if(j<i){
+  >             calling_j();
+  >             j++;
+  >             V(mutex_j);	// 释放访问
+  >             sell_bread();
+  >         } else{
+  >             V(mutex_j);
+  >             have_a_rest();
+  >         }
+  >     }
+  > }
+  > ~~~
+
 * 
-
-
 
