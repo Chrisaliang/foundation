@@ -129,5 +129,61 @@
   > }
   > ~~~
 
-* 
+* > P、V操作题思路：首先确认共享变量，然后确认对于该共享变量的操作程序
+
+* 9，某工厂两个生产车间和一个装配车间，两个生产车间分别生产A、B两种零件，装配车间的任务是把A、B两种零件组装成产品。两个生产车间每生产一个零件后，都要分别把它们送到装配车间的货架F1、F2上。F1存放零件A，F2存放零件B，F1和F2的容量均为10个零件。装配工人每次从货架上取一个零件A和零件B后组装产品。
+
+  > * 思路：produce_a 生产A零件，生产后，将产品送到货架下，获取互斥使用权限，将产品上架，货架空间减一，释放使用权限，produce_b生产B零件，货架1，2分别互斥使用
+  >
+  > ~~~ c
+  > semaphore mutex_f1 = 1, mutex_f2 = 1;		// 货架互斥信号量
+  > semaphore empty_f1 = 10, empty_f2 = 10;		// 货架上剩余空位
+  > semaphore full_f1 = 0, full_f2 = 0;			// 货架上的货物数量
+  > 
+  > process produce_a(){
+  >     while(true){
+  >         produce_a_product_A();					// 生产A零件
+  >         send_A_2_f1();							// 将生产的A零件送到货架下
+  >         P(empty_f1);							// 货架1还有空位可以存放零件
+  >         P(mutex_f1);							// 互斥使用货架1
+  >         put_A_on_f1();							// 将此产品放在货架1上
+  >         V(mutex_f1);							// 释放货架1
+  >         V(full_f1);								// 货架零件计数
+  >     }
+  > }
+  > 
+  > process produce_b(){
+  >     while(true){
+  >         produce_a_product_b();					// 生产B零件
+  >         send_B_2_f2();							// 将生产的B零件
+  >         P(empty_f2);							// 货架2还有空位可以存放产品
+  >         P(mutex_f2);
+  >         put_B_on_f2();
+  >         V(mutex_f2);
+  >         V(full_f2);
+  >     }
+  > }
+  > 
+  > process assemble_worker(){
+  >     while(true){
+  >         // 获取产品A
+  >         P(full_f1);								// 货架1上有零件A
+  >         P(mutex_f1);							// 获取货架1使用权
+  >         get_a_from_f1();						// 取下零件A
+  >         V(mutex_f1);							// 释放货架使用权
+  >         V(empty_f1);							// 释放空位
+  >         // 获取产品B
+  >         P(full_f2);
+  >         P(mutex_f2);
+  >         get_b_fom_f2();
+  >         V(mutex_f2);
+  >         V(empty_f2);
+  >         // 装配产品
+  >         assemble_product();						// 装配产品
+  >     }
+  > }
+  > ~~~
+  >
+  
+* 10，寺庙有小和尚和老和尚若干，有一水缸，小和尚提水入缸，老和尚饮用。水缸容10桶水，水取自同一水井，每次只容去一桶水，水桶共有3个。每次
 
