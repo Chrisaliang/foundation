@@ -273,5 +273,142 @@
   > ~~~
   > 
   
+* 12，某银行提供一个服务窗口和10个供顾客等待的座位。顾客到达银行，若有空座位，则到取号机上领取一个号，等待叫号。取号机每次仅允许一人使用。当营业员空闲时，通过叫号选取一位顾客，并服务。
+
+     > 思路：使用资源信号量标识空座位，使用互斥信号量使用取号机
+     >
+     > ~~~c
+     > semaphore mutex = 1;			// 互斥使用叫号机
+     > semaphore empty = 10;			// 空座位资源信号量
+     > semaphore service = 0;			// 表示等待服务的客户
+     > 
+     > process customer(){
+     >     P(empty);					// 还有空座位
+     >     P(mutex);					// 互斥取号
+     >     get_a_number();
+     >     V(mutex);					// 释放叫号机
+     >     V(service);					// 排队等候被叫
+     >     wait_for_call();
+     >     get_service();
+     > }
+     > 
+     > process sesrver(){
+     >     while(true){
+     >         P(service);
+     >         V(empty);
+     >         serve();
+     >     }
+     > }
+     > ~~~
+     >
+     
+* 13，有桥如图，车流方向如箭头所示。
+
+     * 1）假设桥上每次只能有一辆车行驶，使用P，V操作实现同步
+     * 2）假设桥上不允许两车交会，但允许同方向多辆车一次通过，使用P，V操作实现同步
+
+     > 思路：1）互斥使用桥，两边车辆全部抢占互斥信号量；2）不同方向的车辆抢占信号量，一边抢占到，则允许同方向的车再次通过。
+     >
+     > * 1)
+     >
+     > ~~~c
+     > semaphore mutex = 1;
+     > 
+     > process up_car(){
+     >     P(mutex);
+     >     drive_through();
+     >     V(mutex);
+     > }
+     > 
+     > process down_car(){
+     >     P(mutex);
+     >     drive_through();
+     >     V(mutex);
+     > }
+     > ~~~
+     >
+     > * 2）
+     >
+     > ~~~c
+     > semaphore mutex = 1;		// 上下行车俩互斥信号量
+     > int up_count = 0;			// 上行车辆计数
+     > int down_count = 0;			// 下行车辆计数
+     > 
+     > process up_car(){			// 上行车辆
+     >     if(up_count == 0){		// 第一个来到
+     >         P(mutex);			// 获取桥的通过权限
+     >     }
+     >     up_count++;
+     >     drive_through();
+     >     up_count--;				// 通过后计数减一
+     >     if(up_count == 0){		// 最后一辆车通过
+     >         V(mutex);			// 释放权限
+     >     }
+     > }
+     > 
+     > process down_car(){
+     >     if(down_count == 0){	// 第一辆上桥车辆
+     >         P(mutex);			// 获取权限
+     >     }
+     >     down_count++;			// 车辆计数
+     >     drive_through();		// 通过
+     >     down_count--;			// 计数减一
+     >     if(down_count == 0){	// 最后一辆通过
+     >         V(mutex);			// 释放权限
+     >     }
+     > }
+     > ~~~
+
+* 15，自行车生产线上有一个箱子，其中有N个位置，每个位置可放一个车架或者一个车轮；设有3名工人，第一个生产车架，放入箱子中，第二个生产车轮，放入箱子中，第三个从箱子中取出一个车架和两个车轮，组装成一台车，试用信号量和PV操作实现工人的合作，不能出现死锁。
+
+     > 思路：用信号量表示箱子中的位置剩余数量，使用一个计数变量表示轮子的数量，如果轮子数量小于2，则拒绝第三个工人从箱子中取零件
+     >
+     > notice: 箱子中，车架的数量不能超过N-2，车轮的数量不能超过N-1；用两个信号量控制
+     >
+     > ~~~c
+     > semaphore empty = N;			// 箱子中剩余可以存放零件的位置数量
+     > semaphore frame = 0;			// 车架
+     > semaphore wheel = 0;			// 车轮
+     > semaphore s1 = N-2;				// 车架最大数
+     > semaphore s2 = N-1;				// 车轮最大数
+     > 
+     > process worker_1(){				// 生产车架
+     >     do{
+     >         machining_frame();		// 加工一个车架
+     >         P(s1);					// 检查是否超过数量限制
+     >         P(empty);				// 是否还有空位
+     >         put_into_box();			// 将车架放入箱子
+     >         V(frame);				// 车架数量加一
+     >     }while(1);
+     > }
+     > 
+     > process worker_2(){				// 加工车轮
+     >     do{
+     >         machining_wheel();		// 加工一个轮子
+     >         P(s2);					// 检查是否超过车轮最大数力量
+     >         P(empty);				// 箱子中还有位置
+     >         put_into_box();			// 将车轮放入箱子
+     >         V(wheel);				// 车轮数量加一
+     >     }while(1);
+     > }
+     > 
+     > process worker_3(){
+     >     do{
+     >         P(frame);			// 检查是否还有车架
+     >         get_frame();		// 取出车架
+     >         V(empty);			// 释放一个空位
+     >         V(s1);
+     >         P(wheel);			// 检查车轮  
+     >         P(wheel);			// 检查另一个车轮
+     >         get_2wheels();		// 取出两个轮子
+     >         V(empty);
+     >         V(empty);			// 释放两个空间
+     >         V(s2);			// 可装入车轮数增加
+     >         V(s2);
+     >         assemble_bicycle();	// 组装成一辆自行车
+     >     }while(1);
+     > }
+     > ~~~
+
 * 
 
