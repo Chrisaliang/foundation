@@ -5,7 +5,7 @@ int main()
     int a;
     scanf("n = %d", &a);
     a = sum_fun(a);
-    printf("sum id %d", a);
+    printf("sum id %d\n", a);
     return 0;
 }
 
