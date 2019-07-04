@@ -30,10 +30,29 @@ bool ListInsert(SqList L, int i, ElemType e)
     return true;
 }
 
+bool ListDelete(SqList L, int i, ElemType e)
+{
+    // 本算法实现删除顺序表中的第i个元素，并用e返回元素值
+    if (i < 0 || i > L.length)
+        return false;
+    e = L.data[i - 1];
+    for (int j = i; j < L.length; j++)
+        L.data[j - 1] = L.data[j];
+    L.length--;
+    return true;
+}
+
+int LocateElem(SqList L, ElemType e)
+{
+    for (int i = 0; i < L.length; i++)
+        if (L.data[i] == e)
+            return i + 1;
+    return 0;
+}
 
 
 
-
-int main(){
+int main()
+{
     return 0;
 }
