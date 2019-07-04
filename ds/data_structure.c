@@ -15,7 +15,7 @@ typedef struct SeqList
 {
     ElemType *data;
     int length;
-};
+} SeqList;
 
 bool ListInsert(SqList L, int i, ElemType e)
 {
@@ -28,4 +28,12 @@ bool ListInsert(SqList L, int i, ElemType e)
     L.data[i - 1] = e;
     L.length++;
     return true;
+}
+
+
+
+
+
+int main(){
+    return 0;
 }
