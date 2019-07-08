@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdio.h>
 #define MaxSize 50 // 定义线性表的最大长度
 
 typedef int ElemType;
@@ -50,7 +51,27 @@ int LocateElem(SqList L, ElemType e)
     return 0;
 }
 
-
+bool remove_min(SqList L, ElemType e)
+{
+    if (L.length <= 0)
+    {
+        printf("empty list");
+        return false;
+    }
+    e = L.data[0];
+    int idx = 0;
+    for (int i = 0; i < L.length; i++)
+    {
+        if (L.data[i] < e)
+        {
+            e = L.data[i];
+            idx = i;
+        }
+    }
+    L.data[idx] = L.data[L.length - 1];
+    L.length--;
+    return true;
+}
 
 int main()
 {
