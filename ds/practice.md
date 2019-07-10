@@ -71,10 +71,49 @@
 
 * 4，从有序顺序表中删除其值在给定的值s和t之间的所有元素，如果s和t不合理或顺序表空，显示错误信息并退出。
 
-  > 思路：
+  > 思路：获取第一个符合条件的元素所在位置，从当前位置进行删除操作，
+  >
+  > ~~~c
+  > void remove_range(SqList L, int s, int t)
+  > {
+  >     if (L.length == 0 || s > t)
+  >         return;
+  >     int count = 0;
+  >     for (int i = 0; i < L.length; i++)
+  >     {
+  >         L.data[i - count] = L.data[i];      // 将元素向前移动 count 个位置
+  >         if (L.data[i] > s && L.data[i] < t) // 元素值位于s和t之间
+  >             count++;                        // 计数器自增
+  >     }
+  >     L.length -= count;
+  > }
+  > ~~~
+
+* 6，从有序顺序表中删除所有值重复的元素，使其值唯一
+
+  > 思路：使用临时变量记录当前元素值，遇到下一个相同的值，将其删除
   >
   > ~~~c
   > 
+  > void remove_duplicate(SqList L)
+  > {
+  >     if (L.length == 0)
+  >         return;
+  >     ElemType temp = L.data[0];
+  >     int count = 0;
+  >     for (int i = 0; i < L.length; ++i)
+  >     {
+  >         L.data[i - count] = L.data[i] // 当前元素前移 count个位置
+  >                             if (L.data[i] == temp)
+  >         {
+  >             count++; // 重复元素计数加一
+  >         }
+  >         else
+  >         {
+  >             temp = L.data[i]; // 过滤不相等的元素
+  >         }
+  >     }
+  > }
   > ~~~
   >
   > 
