@@ -17,7 +17,21 @@ typedef struct SeqList
 {
     ElemType *data;
     int length;
+    int InitSize;
 } SeqList;
+
+int InitList(SqList *L)
+{
+//    (*L).data = (ElemType *)malloc(InitSize * sizeof(ElemType));
+    //不知什么问题不能用LIST_INIT_SIZE，必须用100，下面的realloc函数也是一样？
+    // if ((*L).data == NULL)
+    // {
+    //     exit(1);
+    // }
+    (*L).length = 0;
+    //    (*L).listsize=LIST_INIT_SIZE;
+    return 1;
+}
 
 bool ListInsert(SqList L, int i, ElemType e)
 {
@@ -90,7 +104,7 @@ void remove_x(SqList L, int x)
     int count = 0; // 记录符合条件的值的个数
     for (int i = 0; i < L.length; i++)
     {
-        L.data[i - k] = L.data[i]; // 将元素向前移动 count 个位置
+        L.data[i - count] = L.data[i]; // 将元素向前移动 count 个位置
         if (L.data[i] == x)
         {            // 如果元素值等于指定值
             count++; // count计数器自增
@@ -101,5 +115,14 @@ void remove_x(SqList L, int x)
 
 int main()
 {
+    SqList *list;
+    // InitList(list);
+    list->length = 5;
+    for (int i = 0; i < list->length; ++i)
+    {
+        list->data[i] = i * 3;
+    }
+    remove_x(*list,3);
+    printf("list length: %d",list->length);
     return 0;
 }
