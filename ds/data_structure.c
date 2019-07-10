@@ -101,6 +101,8 @@ void reverse_list(SqList L)
 
 void remove_x(SqList L, int x)
 {
+    if (L.length == 0)
+        return;
     int count = 0; // 记录符合条件的值的个数
     for (int i = 0; i < L.length; i++)
     {
@@ -115,6 +117,8 @@ void remove_x(SqList L, int x)
 
 void remove_range(SqList L, int s, int t)
 {
+    if (L.length == 0 || s > t)
+        return;
     int count = 0;
     for (int i = 0; i < L.length; i++)
     {
