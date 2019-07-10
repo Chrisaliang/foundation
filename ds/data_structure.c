@@ -137,8 +137,8 @@ void remove_duplicate(SqList L)
     int count = 0;
     for (int i = 0; i < L.length; ++i)
     {
-        L.data[i - count] = L.data[i] // 当前元素前移 count个位置
-                            if (L.data[i] == temp)
+        L.data[i - count] = L.data[i]; // 当前元素前移 count个位置
+        if (L.data[i] == temp)
         {
             count++; // 重复元素计数加一
         }

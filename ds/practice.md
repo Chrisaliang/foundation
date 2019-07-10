@@ -94,7 +94,6 @@
   > 思路：使用临时变量记录当前元素值，遇到下一个相同的值，将其删除
   >
   > ~~~c
-  > 
   > void remove_duplicate(SqList L)
   > {
   >     if (L.length == 0)
@@ -103,8 +102,8 @@
   >     int count = 0;
   >     for (int i = 0; i < L.length; ++i)
   >     {
-  >         L.data[i - count] = L.data[i] // 当前元素前移 count个位置
-  >                             if (L.data[i] == temp)
+  >         L.data[i - count] = L.data[i]; // 当前元素前移 count个位置
+  >         if (L.data[i] == temp)
   >         {
   >             count++; // 重复元素计数加一
   >         }
