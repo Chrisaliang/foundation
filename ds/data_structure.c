@@ -129,6 +129,26 @@ void remove_range(SqList L, int s, int t)
     L.length -= count;
 }
 
+void remove_duplicate(SqList L)
+{
+    if (L.length == 0)
+        return;
+    ElemType temp = L.data[0];
+    int count = 0;
+    for (int i = 0; i < L.length; ++i)
+    {
+        L.data[i - count] = L.data[i] // 当前元素前移 count个位置
+                            if (L.data[i] == temp)
+        {
+            count++; // 重复元素计数加一
+        }
+        else
+        {
+            temp = L.data[i]; // 过滤不相等的元素
+        }
+    }
+}
+
 int main()
 {
     SqList *list;
