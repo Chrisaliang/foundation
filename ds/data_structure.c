@@ -22,7 +22,7 @@ typedef struct SeqList
 
 int InitList(SqList *L)
 {
-//    (*L).data = (ElemType *)malloc(InitSize * sizeof(ElemType));
+    //    (*L).data = (ElemType *)malloc(InitSize * sizeof(ElemType));
     //不知什么问题不能用LIST_INIT_SIZE，必须用100，下面的realloc函数也是一样？
     // if ((*L).data == NULL)
     // {
@@ -113,6 +113,18 @@ void remove_x(SqList L, int x)
     L.length -= count;
 }
 
+void remove_range(SqList L, int s, int t)
+{
+    int count = 0;
+    for (int i = 0; i < L.length; i++)
+    {
+        L.data[i - count] = L.data[i];      // 将元素向前移动 count 个位置
+        if (L.data[i] > s && L.data[i] < t) // 元素值位于s和t之间
+            count++;                        // 计数器自增
+    }
+    L.length -= count;
+}
+
 int main()
 {
     SqList *list;
@@ -122,7 +134,7 @@ int main()
     {
         list->data[i] = i * 3;
     }
-    remove_x(*list,3);
-    printf("list length: %d",list->length);
+    remove_x(*list, 3);
+    printf("list length: %d", list->length);
     return 0;
 }
