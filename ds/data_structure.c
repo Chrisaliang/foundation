@@ -63,6 +63,30 @@ LinkList List_TailInsert(LinkList L)
     return L;
 }
 
+LNode *GetElem(LinkList L, int i)
+{
+    int j = 1;
+    LNode *p = L->next;
+    if (i == 0)
+        return L;
+    if (i < 1)
+        return NULL;
+    while (p && j < i)
+    {
+        p = p->next;
+        j++;
+    }
+    return p;
+}
+
+LinkList *LocateElem(LinkList L, ElemType e)
+{
+    LNode *p = L->next;
+    while (p != NULL && p->data != e)
+        p = p->next;
+    return p;
+}
+
 int InitList(SqList *L)
 {
     //    (*L).data = (ElemType *)malloc(InitSize * sizeof(ElemType));
