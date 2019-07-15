@@ -20,6 +20,49 @@ typedef struct SeqList
     int InitSize;
 } SeqList;
 
+typedef struct LNode
+{
+    ElemType data;
+    struct LNode *next;
+} LNode, *LinkList;
+
+LinkList List_previousInsert(LinkList L)
+{
+    // 从表尾到表头逆向建立单链表L，每次均在头节点之后插入元素
+    LNode *s;
+    int x;
+    L = (LinkList)malloc(sizeof(LNode));
+    L->next = NULL;
+    scanf("%d", &x);
+    while (x != 9999)
+    {
+        s = (LNode)malloc(sizeof(LNode));
+        s->data = x;
+        s->next = L->next;
+        L->next = s;
+        scanf("%d", &x);
+    }
+    return L;
+}
+
+LinkList List_TailInsert(LinkList L)
+{
+    int x;
+    L = (LinkList)malloc(sizeof(LNode));
+    LNode *s, *r = L; // r 为表尾指针
+    scanf("%d", &x);
+    while (x != 9999)
+    {
+        s = (LinkList)malloc(sizeof(LNode));
+        s->data = x;
+        r->next = s;
+        r = s;
+        scanf("%d", &x);
+    }
+    r->next = NULL;
+    return L;
+}
+
 int InitList(SqList *L)
 {
     //    (*L).data = (ElemType *)malloc(InitSize * sizeof(ElemType));
