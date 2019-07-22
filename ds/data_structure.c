@@ -216,6 +216,20 @@ void remove_duplicate(SqList L)
     }
 }
 
+void cycle_move(SqList L, int p)
+{
+    SqList *temp;
+    temp->length = p;
+    for (int i = 0; i < L.length; i++)
+    {
+        if (i < p)
+            temp->data[i] = L.data[i];
+        L.data[i - p] = L.data[i];
+        if (i >= L.length - p)
+            L.data[i - p] = temp->data[i - p];
+    }
+}
+
 int main()
 {
     SqList *list;
