@@ -4,6 +4,8 @@
 
 ### Comprehension
 
+### 2.2 Sequence List
+
 * 1，从顺序表中删除具有最小值的元素（唯一），并由函数返回被删元素的值，空出的位置由最后一个元素填补，若顺序表为空，显示错误信息并退出运行
 
   > 思路：输入顺序表，使用一个空元素记录最小值
@@ -132,4 +134,33 @@
   > ~~~
   >
   > * 时间空间复杂度
+
+
+
+### 2.3 Link List
+
+* 11，设C = {a<sub>1</sub>, b<sub>1</sub>, a<sub>2</sub>, b<sub>2</sub>, ... a<sub>n</sub>, b<sub>n</sub> } 为线性表，采用带头节点的hc单链表存放，设计一个就地算法，将其拆分成两个线性表，是的A = {a<sub>1</sub>, a<sub>2</sub>, ... a<sub>n</sub> }, B = {b<sub>n</sub>, ... b<sub>2</sub>, b<sub>1</sub> }。
+
+  > 设计思想：
+  >
+  > 遍历链表C，取第一个节点，将其用尾插法插入链表A中，取之后一个节点，使用头插法，将其插入到链表B中。
+  >
+  > 算法
+  >
+  > ~~~c++
+  > LinkList diverse_list(LinkList &A) {
+  >     LinkList hb = (LinkList) malloc(sizeof(LNode));
+  >     hb->next = null;
+  >     LNode *p = A->next, *r = p->next;
+  >     while (p) {
+  >         p = r->next;        // 跳过第二个节点指向第三个节点
+  >         r->next = hb->next; // 将第二个节点连接到B链表上
+  >         hb->next = r;
+  >         r = p->next;
+  >     }
+  >     return hb;
+  > }
+  > ~~~
+  >
+  > 
 

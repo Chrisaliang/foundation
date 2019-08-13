@@ -230,6 +230,21 @@ void cycle_move(SqList L, int p)
     }
 }
 
+LinkList diverse_list(LinkList &A)
+{
+    LinkList hb = (LinkList)malloc(sizeof(LNode));
+    hb->next = null;
+    LNode *p = A->next, *r = p->next;
+    while (p)
+    {
+        p = r->next;        // 跳过第二个节点指向第三个节点
+        r->next = hb->next; // 将第二个节点连接到B链表上
+        hb->next = r;
+        r = p->next;
+    }
+    return hb;
+}
+
 int main()
 {
     SqList *list;
