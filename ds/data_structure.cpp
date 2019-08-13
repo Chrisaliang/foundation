@@ -26,6 +26,12 @@ typedef struct LNode
     struct LNode *next;
 } LNode, *LinkList;
 
+typedef struct DNode
+{
+    ElemType data;
+    struct DNode *prior, *next;
+} DNode, *DLinkList;
+
 LinkList List_previousInsert(LinkList L)
 {
     // 从表尾到表头逆向建立单链表L，每次均在头节点之后插入元素
