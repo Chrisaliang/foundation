@@ -1,6 +1,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+/**************** Define ****************/
+
 #define MaxSize 50 // 定义线性表的最大长度
 
 typedef int ElemType;
@@ -31,6 +33,55 @@ typedef struct DNode
     ElemType data;
     struct DNode *prior, *next;
 } DNode, *DLinkList;
+
+typedef struct
+{
+    ElemType data[MaxSize];
+    int top;
+} SqStack;
+
+typedef struct BiNode
+{
+    ElemType data;
+    struct BiNode *lChild, *rChild;
+} BiTNode, *BiTree;
+
+/**************** Atom operate ****************/
+void InitStack(SqStack &s)
+{
+    s.top = -1;
+}
+
+bool IsEmpty(SqStack s)
+{
+    return s.top == -1;
+}
+
+bool Push(SqStack &s, ElemType x)
+{
+    if (s.top == MaxSize - 1)
+        return false;
+    s.data[++s.top] = x;
+    return true;
+}
+
+bool Pop(SqStack &s, ElemType &x)
+{
+    if (s.top == -1)
+        return false;
+    x = s.data[s.top--];
+    return true;
+}
+
+bool GetTop(SqStack &s, ElemType &x)
+{
+    if (s.top == -1)
+        return false;
+    x = s.data[s.top];
+    return true;
+}
+
+/**************** Chapter 2 ****************/
 
 LinkList List_previousInsert(LinkList L)
 {
@@ -251,6 +302,29 @@ LinkList diverse_list(LinkList &A)
     return hb;
 }
 
+/**************** Chapter 4 ****************/
+void InOrder(BiTree T)
+{
+    SqStack S;
+    InitStack(S);
+    BiTree p = T;
+    while (p || !IsEmpty(S))
+    {
+        if (p)
+        {
+            Push(S, p);
+            p = p->lChild;
+        }
+        else
+        {
+            Pop(S, p);
+            printf("%d", p->data)
+                p = p->rChild;
+        }
+    }
+}
+
+/**************** Test ****************/
 int main()
 {
     SqList *list;
