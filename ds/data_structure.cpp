@@ -324,6 +324,28 @@ void InOrder(BiTree T)
     }
 }
 
+BiTree PreInCreate(ElemType A[], ElemType B[], int L1, int h1, int L2, int h2)
+{
+    // L1和h1为先序序列的第一个和最后一个节点下标，L2 和 h2 为中序的第一个和最后一个结点下标
+    // 初始调用时，L1=L2=1；h1=h2=n
+    BiTNode *root = (BiTNode *)malloc(sizeof(BiTNode));
+    root->data = A[L1];
+    int i;
+    for (i = L2; B[i] != root->data; i++)
+        ;
+    int lLen = i - L2;
+    int rLen = h2 - i;
+    if (lLen)
+        root->lChild = PreInCreate(A, B, L1 + 1, L1 + lLen, L2, L2 + rLen - 1);
+    else
+        root->lChild = NULL;
+    if (rLen)
+        root->rChild = PreInCreate(A, B, h1 - rLen + 1, h1, h2 - rLen + 1, h2);
+    else
+        root->rChild = NULL;
+    return root;
+}
+
 /**************** Test ****************/
 int main()
 {
