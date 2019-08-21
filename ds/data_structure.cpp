@@ -81,6 +81,11 @@ bool GetTop(SqStack &s, ElemType &x)
     return true;
 }
 
+void visit(BiTree p)
+{
+    printf("%d", p->data);
+}
+
 /**************** Chapter 2 ****************/
 
 LinkList List_previousInsert(LinkList L)
@@ -344,6 +349,41 @@ BiTree PreInCreate(ElemType A[], ElemType B[], int L1, int h1, int L2, int h2)
     else
         root->rChild = NULL;
     return root;
+}
+
+/**
+ * todo post order traversing tree
+ * not finished
+ * @param T
+ */
+void PostOrder(BiTree &T)
+{
+    SqStack s;
+    InitStack(s);
+    BiTree p = T;
+    Push(s, p);
+    p = p->lChild while (!IsEmpty(s))
+    {
+        while (p)
+        {
+            Push(s, p);
+            p = p->lChild;
+        }
+        Pop(s, p);
+        if (p->rChild)
+        {
+            Push(s, p);
+            p = p->rChild;
+            Push(s, p);
+            p = p->lChild;
+        }
+        else
+        {
+            visit(p);
+            GetTop(s, p);
+            p = p->rChild;
+        }
+    }
 }
 
 /**************** Test ****************/
