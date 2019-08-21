@@ -386,6 +386,70 @@ void PostOrder(BiTree &T)
     }
 }
 
+typedef struct
+{
+    BiTree t;
+    int tag; // 0 表示左子树被访问，1 表示右子树被访问
+} stack;
+stack s[], s1[];
+
+/**
+ * 最近公共祖先结点
+ * @param root 树
+ * @param p 结点1
+ * @param q 结点2
+ * @param r 返回公共结点
+ */
+void ANCESTOR(BiTree &root, BiTNode *p, BiTNode *q, BiTNode *r)
+{
+    int top = 0, top1 = 0;
+    BiTree bt = root;
+    while (bt != NULL || top > 0)
+    {
+        while (bt != NULL && bt != p && bt != q)
+        {
+            while (bt)
+            {
+                s[++top].t = bt;
+                s[top].tag = 0;
+                bt = bt->lChild;
+            } // 沿左向下
+        }
+
+        while (top != 0 && s[top].tag == 1)
+        {
+            // 假定p在q的左侧，遇到p时，栈中元素均是p的祖先结点
+            if (s[top].t == p)
+            { // 找到 p结点
+                for (int i = 0; i < top; ++i)
+                {
+                    s1[i] = s[i];
+                    top1 = top;
+                }
+            } // 将栈中的元素全部转入辅助栈保存
+            if (s[top].t = q)
+            { // 找到 q结点
+                for (int i = top; i > 0; i--)
+                { // 将栈中元素的树节点到s1中进行匹配
+                    for (j = top1; j > 0; j--)
+                        if (s1[j].t == s[i].t)
+                        {
+                            r = s[i].t; // 此为最近的公共祖先结点
+                            return;
+                        }
+                }
+                top--; // 退栈
+            }
+        }
+        if (top != 0)
+        {
+            s[top].tag = 1;
+            bt = s[top].t->rChild;
+        }
+    }
+    r = NULL;
+}
+
 /**************** Test ****************/
 int main()
 {
