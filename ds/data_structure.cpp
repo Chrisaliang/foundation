@@ -307,6 +307,28 @@ LinkList diverse_list(LinkList &A)
     return hb;
 }
 
+/**
+ * 求数组中的主元素
+ * @param A 数组
+ * @param n 数组长度
+ * @return 主元素值，没有则为-1
+ */
+int Majority(int A[], int n)
+{
+    int *B = (int *)malloc(sizeof(int) * n); // 分配空数组，记录每一个对应元素出现的次数
+    memset(B, 0, sizeof(int) * n);           // 设置初始值为0
+    for (int i = 0; i < n; ++i)
+    {
+        B[A[i]] += 1;
+    }
+    int m = -1;
+    for (int j = 0; j < n; ++j)
+    {
+        m = B[j] > n / 2 ? B[j] : -1;
+    }
+    return m;
+}
+
 /**************** Chapter 4 ****************/
 void InOrder(BiTree T)
 {
