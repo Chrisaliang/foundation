@@ -46,6 +46,37 @@ typedef struct BiNode
     struct BiNode *lChild, *rChild;
 } BiTNode, *BiTree;
 
+#define MaxVertexNum 100
+
+typedef char VertexType;
+typedef int EdgeType;
+typedef struct
+{
+    VertexType Vex[MaxVertexNum];
+    EdgeType Edge[MaxVertexNum][MaxVertexNum];
+    int vexNum, arcNum;
+} MGraph;
+
+typedef struct ArcNode
+{
+    int adjVex;
+    struct ArcNode *next;
+    // infoType info;   // 网的边权值
+} ArcNode;
+
+typedef struct VNode
+{
+    VertexType data;
+    ArcNode *first;
+}
+VNode, AdjList[MaxVertexNum];
+
+typedef struct
+{
+    AdjList vertices;
+    int vexNum, arcNum;
+} ALGraph;
+
 /**************** Atom operate ****************/
 void InitStack(SqStack &s)
 {
@@ -471,6 +502,10 @@ void ANCESTOR(BiTree &root, BiTNode *p, BiTNode *q, BiTNode *r)
     }
     r = NULL;
 }
+
+/**************** Chapter 5 ****************/
+
+
 
 /**************** Test ****************/
 int main()
